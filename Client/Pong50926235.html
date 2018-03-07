@@ -1,0 +1,132 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> Pong </title>
+
+    <style>
+        input, textarea {
+            border: 2px solid #990033;
+            margin: 10px;
+            padding: 0px;
+        }
+		html,body {
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		overflow: hidden;
+		padding-right: 100px;
+		}
+			
+        #ip {
+            line-height: 25px;
+            color: black;
+        }
+
+        #port {
+            line-height: 25px;
+            color: black
+        }
+
+        #username {
+			line-height: 25px;
+            color: black;
+        }
+
+        #body {
+			position:fixed;
+            color: white;
+			top:500px;
+			left:200px;
+			font-size: 30px;
+        }
+		#Canvas{
+			color:white;
+			margin: auto;
+			display: block;
+			padding: 7px;
+			position:fixed;
+			right:150px;
+			top:0;
+			bottom:0;
+		}
+		
+		#connectButton{
+			color: black;
+			background-color:#FFCC00;
+			font-size: 25px;
+			margin-top:20px;
+			float:right;
+		}
+		
+		#title{
+			color:white;
+			position:fixed;
+			top:300px;
+			left:200px;
+			font-size:75px;
+			font-family:Lucida Console;
+		}
+		#credit{
+			color:white;
+			position:fixed;
+			bottom:0;
+			font-size: 25px;
+		}
+    </style>
+
+<h1 id="title">Pong</h1><br />
+</head>
+<body bgcolor="#000000" align="center"><br />
+    <div id="body">
+        Server IP: <input type="text" id="ip" size=30px><br />
+        Server Port: <input type="text" id="port" size=27px><br />
+        Username: <input type="text" id="username" size=29px><br />
+        <button type="button" id="connectButton" onclick="connect();">Connect</button>
+    </div>
+	
+	
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="fancywebsocket.js"></script>
+<div id="credit">
+		Created By: Min Woo Choi, Dominic Langmesser, and Yung-Chu Chuang
+	</div>
+<script>
+    var Server;
+    var canvas = document.getElementById("Canvas");
+
+
+
+    function update(text) {
+        //game.draw();
+    }
+
+    function send(text) {
+        Server.send('message', text);
+    }
+
+    function connect() {
+        Server = new FancyWebSocket('ws://' + document.getElementById('ip').value + ':' + document.getElementById('port').value);
+
+        //Let the user know we're connected
+        Server.bind('open', function () {
+            document.getElementById("connectButton").disabled = true;
+        });
+
+        //Disconnection occurred.
+        Server.bind('close', function (data) {
+            document.getElementById("connectButton").disabled = false;
+        });
+
+        //Log any messages sent from server
+        Server.bind('message', function (payload) {
+            update(payload);
+        });
+
+        Server.connect();
+    }
+
+</script>
+</html>

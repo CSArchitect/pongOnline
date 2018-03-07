@@ -1,0 +1,103 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> Pong </title>
+
+    <style>
+        input, textarea {
+            border: 1px solid #990033;
+            margin: 5px;
+            padding: 0px
+        }
+
+        #ip {
+            line-height: 20px;
+            color: black
+        }
+
+        #port {
+            line-height: 20px;
+            color: black
+        }
+
+        #username {
+            color: black
+        }
+
+        #body {
+            max-width: 850px;
+            margin: auto;
+            color: white
+        }
+    </style>
+
+</head>
+<body bgcolor="#000000" align="center">
+
+    <center>
+        <h1 style="color:white; font-size:75px; font-family:Lucida Console; margin-top:5px; margin-bottom:0px">Pong</h1>
+    </center>
+    <br />
+    <div id="body">
+        Server ip: <input type="text" id="ip">
+        Server port: <input type="text" id="port">
+        Username: <input type="text" id="username">
+        <button type="button" id="connectButton" onclick="connect();" style="color:black; background-color:#FFCC00">Connect</button>
+    </div>
+
+</body>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="fancywebsocket.js"></script>
+
+<script>
+    var Server;
+
+    function log(text) {
+        $log = $('#log');
+        //Add text to log
+        $log.append(($log.val() ? "\n" : '') + text);
+        //Autoscroll
+        $log[0].scrollTop = $log[0].scrollHeight - $log[0].clientHeight;
+    }
+
+    function send(text) {
+        Server.send('message', text);
+    }
+
+    function connect() {
+        log('Connecting...');
+        Server = new FancyWebSocket('ws://' + document.getElementById('ip').value + ':' + document.getElementById('port').value);
+
+        $('#message').keypress(function (e) {
+            if (e.keyCode == 13 && this.value) {
+                log('You: ' + this.value);
+                send(this.value);
+
+                $(this).val('');
+            }
+        });
+
+        //Let the user know we're connected
+        Server.bind('open', function () {
+            document.getElementById("cntBtn").disabled = true;
+            log("Connected.");
+        });
+
+        //Disconnection occurred.
+        Server.bind('close', function (data) {
+            document.getElementById("cntBtn").disabled = false;
+            log("Disconnected.");
+        });
+
+        //Log any messages sent from server
+        Server.bind('message', function (payload) {
+            log(payload);
+        });
+
+        Server.connect();
+    }
+
+</script>
+</html>
