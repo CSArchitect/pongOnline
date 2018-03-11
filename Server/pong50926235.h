@@ -10,8 +10,8 @@ public:
 	Pong();
 	Pong(unsigned int width, unsigned int height);
 	~Pong();
-	void updateBall(int ballX, int ballY, int ballVelX, int ballVelY);
-	void updatePaddle(PLAYER player, int paddleMove);
+	void updateBall(float ballX, float ballY, float ballVelX, float ballVelY);
+	void updatePaddle(PLAYER player, float paddleMove);
 	void updateInputs(PLAYER player, string inputs);
 	void init();
 	string getGameState();
@@ -39,7 +39,7 @@ private:
 			this->radius = 10;
 			this->owner = p1;
 		}
-        ball(int x, int y, int velX, int velY, PLAYER owner, int speed=1, int radius=10){
+        ball(float x, float y, float velX, float velY, PLAYER owner, float speed=1, int radius=10){
             this->x = x;
             this->y = y;
             this->v.x = velX;
@@ -48,14 +48,14 @@ private:
             this->radius = radius;
 			this->owner = owner;
         }
-		int x;
-		int y;
+		float x;
+		float y;
 		struct velocity{
-			int x;
-			int y;
+			float x;
+			float y;
 		};
 		velocity v;
-		int speed;
+		float speed;
 		int radius;
 		PLAYER owner;
 	};
@@ -81,6 +81,6 @@ private:
 	paddle player4bottom;
 	board gameBoard;
 	score score;
-	int paddleSpeed;
+	float paddleSpeed;
 };
 #endif

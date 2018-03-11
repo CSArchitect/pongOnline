@@ -18,7 +18,7 @@ using namespace std;
 	}
 	Pong::~Pong(){}
 
-	void Pong::updateBall(int ballX, int ballY, int ballVelX, int ballVelY){
+	void Pong::updateBall(float ballX, float ballY, float ballVelX, float ballVelY){
 		int newBallXPos = ballX;
 		int newBallYPos = ballY;
 		int newBallVelX = ballVelX;
@@ -95,7 +95,7 @@ using namespace std;
 		}
 	}
 
-	void Pong::updatePaddle(PLAYER player, int paddleMove){
+	void Pong::updatePaddle(PLAYER player, float paddleMove){
 		switch (player) {
 		case p1: if (paddleMove == -1)
 						this->player1left.top += paddleSpeed;
