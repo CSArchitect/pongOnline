@@ -130,7 +130,7 @@ void periodicHandler(){
 		runInputQueue();
         vector<int> clientIDs = server.getClientIDs();
         for (int i = 0; i < clientIDs.size(); i++)
-            server.wsSend(clientIDs[i], pong.getGameState());
+            server.wsSend(clientIDs[i], to_string(chrono::system_clock::now().time_since_epoch().count()) + '|' + pong.getGameState());
 
         next = clock() + 10;
     }
@@ -165,7 +165,7 @@ void parseStringUpdatePacket(int clientID, string message){
 		chrono::system_clock::duration timestamp = artificialLatency(now, 2, 5, 200); //0 =fixed, 1=random, 2=incremental (min, max) for incremental
 		inputTimeQueue.push(input(player_num, tokens[1], timestamp, timestamp - now));
 		//now = chrono::time_point_cast<chrono::milliseconds>(now);
-		cout << endl << chrono::duration_cast<chrono::milliseconds>(now).count() << " " << chrono::duration_cast<chrono::milliseconds>(timestamp - now).count();
+		//cout << endl << chrono::duration_cast<chrono::milliseconds>(now).count() << " " << chrono::duration_cast<chrono::milliseconds>(timestamp - now).count();
 	}
 }
 
