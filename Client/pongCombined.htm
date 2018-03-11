@@ -1,4 +1,4 @@
-﻿﻿<!doctype html>
+﻿<!doctype html>
 <HTML>
 <HEAD>
     <meta charset="utf-8">
@@ -93,7 +93,7 @@
         style="border:1px solid #000000;"></canvas>
 <br />
 <div id="credit">
-    Created By: Min Woo Choi and Dominic Langmesser
+    Created By: Min Woo Choi, Dominic Langmesser, and Yung-Chu Chuang
 </div>
 <script>
     var Server;
@@ -102,10 +102,10 @@
 
     function update(text) {
         //console.log(text);
-        //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
+        //"ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
         var tokens = text.split("|");
         console.log(text);
-        game.draw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13]);
+        game.draw(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12]);
     }
 
     function send(text) {
@@ -166,42 +166,42 @@
         this.ball.vx = 0;
     }
 
-/********************************************************************
-                                        Draw Functions
-********************************************************************/
-
-    //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
+    //"ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
     Game.prototype.draw = function (bX, bY, bvX, bvY, p1T, p2T, p3L, p4L, s1, s2, s3, s4, ballColor) {
         this.context.clearRect(0, 0, this.width, this.height);
-        this.ball.draw(this.context, math.floor(parseFloat(bX)), math.floor(parseFloat(bY)), ballColor);
+        this.ball.draw(this.context, bX, bY, ballColor);
 
-        this.p1.draw(this.context, 5, math.floor(parseFloat(p1T)));
-        this.p2.draw(this.context, this.width - 5 - 2, math.floor(parseFloat(p2T)));
-        this.p3.draw(this.context, math.floor(parseFloat(p3L)), 5);
-        this.p4.draw(this.context, math.floor(parseFloat(p4L)), this.height - 5 - 2);
+        this.p1.draw(this.context, 5, p1T);
+        this.p2.draw(this.context, this.width - 5 - 2, p2T);
+        this.p3.draw(this.context, p3L, 5);
+        this.p4.draw(this.context, p4L, this.height - 5 - 2);
         this.display1.draw(this.context, s1);
         this.display2.draw(this.context, s2);
         this.display3.draw(this.context, s3);
         this.display4.draw(this.context, s4);
     };
 
-    Game.prototype.drawLocal = function () {
-        this.context.clearRect(0, 0, this.width, this.height);
-        this.ball.draw(this.context, math.floor(parseFloat(this.ball.x)), math.floor(parseFloat(this.ball.y)), this.ball.color);
+    Game.prototype.update = function () {
+        if (this.paused)
+            return;
 
-        this.p1.draw(this.context, 5, math.floor(parseFloat(this.p1.y)));
-        this.p2.draw(this.context, this.width - 5 - 2, math.floor(parseFloat(this.p2.y)));
-        this.p3.draw(this.context, math.floor(parseFloat(this.p3.x)), 5);
-        this.p4.draw(this.context, math.floor(parseFloat(this.p4.x)), this.height - 5 - 2);
-        this.display1.draw(this.context, this.display1.value);
-        this.display2.draw(this.context, this.display2.value);
-        this.display3.draw(this.context, this.display3.value);
-        this.display4.draw(this.context, this.display4.value);
+        this.ball.update();
+        this.display1.value = this.p1.score;
+        this.display2.value = this.p2.score;
+
+        // To which Y direction the paddle is moving
+//        if (this.keys.isPressed(37)) { // LEFT
+//            this.p1.y = Math.min(this.height - this.p1.height, this.p1.y + 4);
+//        } else if (this.keys.isPressed(38)) { // UP
+//            this.p1.y = Math.max(0, this.p1.y - 4);
+//        } else if (this.keys.isPressed(39)) { // RIGHT
+//            this.p1.y = Math.max(0, this.p1.y - 4);
+//        } else if (this.keys.isPressed(40)) { // DOWN
+//            this.p1.y = Math.max(0, this.p1.y - 4);
+//        }
     };
 
-    /********************************************************************
-                                            Update Inputs 
-    ********************************************************************/
+
     // To which Y direction the paddle is moving
     Game.prototype.updateInputs = function () {
         var input = ''
@@ -223,14 +223,6 @@
         }
     };
 
-    Game.prototype.update = function () {
-
-    };
-
-
-    /********************************************************************
-                                        Paddle Objects
-********************************************************************/
     // PADDLE
     function Paddle(x, y, width, height, color) {
         this.x = x;
@@ -247,9 +239,7 @@
     };
 
 
-    /********************************************************************
-                                            Ball Objects
-    ********************************************************************/
+    // BALL
     function Ball() {
         this.x = 10;
         this.y = 10;
@@ -257,7 +247,7 @@
         this.vy = 0;
         this.width = 10;
         this.height = 10;
-        this.color = "red";
+        this.owner = '';
     }
 
     Ball.prototype.draw = function (p, x, y, color) {
@@ -265,10 +255,55 @@
         p.fillRect(x, y, this.width, this.height);
     };
 
+    Ball.prototype.update = function () {
+        var newBallXPos = this.x;
+        var newBallYPos = this.y;
+        var newBallVelX = this.vx;
+        var newBallVelY = this.vy;
 
-    /********************************************************************
-                                            Score Objects
-    ********************************************************************/
+        if (newBallXPos + this.width > Game.width) {
+            this.vx = -abs(this.vx);
+        }
+        if (newBallYPos + this.width > Game.height) {
+            this.vy = -abs(this.vy);
+        }
+        if (newBallXPos < 0) {
+           this.vx = abs(this.vx);
+        }
+        if (newBallYPos < 0) {
+            this.vy = abs(this.vy);
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+
+//        //Check if the ball has hit a goal
+//        if (this.x < this.width) {
+//            if (Intersect(player1left, this))
+//                this.owner = p1;
+//            else
+//                playerScore(this.owner);
+//        }
+//        else if (this.x + this.width > Game.width - this.width) {
+//            if (Intersect(player2right, this))
+//                this.owner = p2;
+//            else
+//                playerScore(this.owner);
+//        }
+//        else if (this.y < this.width) {
+//            if (Intersect(player3top, this))
+//                this.owner = p3;
+//            else
+//               playerScore(this.owner);
+        }
+        else if (this.y + this.radius > Game.height - this.width) {
+            if (Intersect(player4bottom, this))
+                this.owner = p4;
+            else
+                playerScore(this.owner);
+        }
+    }
+
+    //DISPLAY
     function Display(x, y, color) {
         this.x = x;
         this.y = y;
@@ -281,9 +316,7 @@
         p.fillText(value, this.x, this.y);
     }
 
-    /********************************************************************
-                                           Key Listener 
-    ********************************************************************/
+    // KEY LISTENER
     function KeyListener() {
         this.pressedKeys = [];
 
@@ -311,9 +344,7 @@
     };
 
 
-    /********************************************************************
-                                            Game Loop
-    ********************************************************************/
+    // Initialize our game instance
     var game = new Game();
 
     function MainLoop() {
