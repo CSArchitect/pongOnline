@@ -99,13 +99,19 @@
     var Server;
     var username;
     var canvas = document.getElementById("Canvas");
+    var serverTimeStart;
 
     function update(text) {
         //console.log(text);
         //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
         var tokens = text.split("|");
-        console.log(text);
-        game.draw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13]);
+        if (tokens[1] = -1) {
+            serverTimeStart = syncServerTime(tokens[0]);
+            game.clock = math.floor((Date.parse(new Date().toUTCString()) - game.date) / 33.33333);
+            console.log(game.clock);
+        }
+        else
+            game.draw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13]);
     }
 
     function send(text) {
@@ -145,6 +151,8 @@
         this.context = canvas.getContext("2d");
         this.context.fillStyle = "white";
         this.keys = new KeyListener();
+        this.date = new Date();
+        this.clock = 0;
 
         this.p1 = new Paddle(5, 0, 3, 75, 'red');
         this.p1.y = this.height / 2 - this.p1.height / 2;
@@ -314,7 +322,8 @@
                                             Sync Server Time
     ********************************************************************/
     function syncServerTime(serverDateStr) {
-        var serverTimestamp = Date.parse(new Date(Date.parse(serverDateStr)));
+        var clientTimestamp = Date.parse(new Date().toUTCString());
+        var serverTimestamp = Date.parse(new Date(Date.parse(serverDateStr)).toUTCString());
 
         var serverClientRequestDiffTime = serverTimestamp - clientTimestamp;
         var nowTimeStamp = Date.parse(new Date().toUTCString());
@@ -324,12 +333,7 @@
 
         serverTimeOffset = (serverClientResponseDiffTime - responseTime);
 
-        var date = new Date();
-
-        date.setTime(date.getTime() + serverTimeOffset);
-
-        callback.call(null, date);
-
+        game.date.setTime(date.getTime() + serverTimeOffset);
     };
 
     /********************************************************************
