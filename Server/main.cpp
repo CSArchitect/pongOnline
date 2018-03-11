@@ -139,8 +139,15 @@ void periodicHandler(){
 
 void sendToClients(string send) {
 	vector<int> clientIDs = server.getClientIDs();
-	for (int i = 0; i < clientIDs.size(); i++)
-		server.wsSend(clientIDs[i], send);
+	for (int i = 0; i < clientIDs.size(); i++) {
+		int playerNum = -1;
+		for (int j = 0; j < 4; j++) {
+			if (players[j].clientID == clientIDs[i])
+				playerNum = j;
+		}
+		if(playerNum != -1)
+			server.wsSend(clientIDs[i], to_string(playerNum) + '|' + send);
+	}
 }
 
 string return_current_time_and_date()
