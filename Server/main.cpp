@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>
 #include <iostream>
 #include <string>
@@ -10,11 +11,14 @@
 #include <queue>
 #include <chrono>
 #include <ctime>
+#include <iomanip>
 #define INTERVAL_MS 10
 
 using namespace std;
 
 chrono::system_clock::duration artificialLatency(chrono::system_clock::duration timestamp, int type, int min, int max);
+string return_current_time_and_date();
+void sendToClients(string send);
 
 /*********************************************
 
@@ -128,12 +132,25 @@ void periodicHandler(){
     clock_t current = clock();
     if (current >= next && playerCount == 4){
 		runInputQueue();
-        vector<int> clientIDs = server.getClientIDs();
-        for (int i = 0; i < clientIDs.size(); i++)
-            server.wsSend(clientIDs[i], to_string(chrono::system_clock::now().time_since_epoch().count()) + '|' + pong.getGameState());
-
+        sendToClients(return_current_time_and_date() + '|' + pong.getGameState());
         next = clock() + 10;
     }
+}
+
+void sendToClients(string send) {
+	vector<int> clientIDs = server.getClientIDs();
+	for (int i = 0; i < clientIDs.size(); i++)
+		server.wsSend(clientIDs[i], send);
+}
+
+string return_current_time_and_date()
+{
+	auto now = std::chrono::system_clock::now();
+	auto in_time_t = std::chrono::system_clock::to_time_t(now);
+
+	std::stringstream ss;
+	ss << std::put_time(localtime(&in_time_t), "%Y-%m-%d %X");
+	return ss.str();
 }
 
 /***********************************************************************

@@ -19,10 +19,10 @@ using namespace std;
 	Pong::~Pong(){}
 
 	void Pong::updateBall(float ballX, float ballY, float ballVelX, float ballVelY){
-		int newBallXPos = ballX;
-		int newBallYPos = ballY;
-		int newBallVelX = ballVelX;
-		int newBallVelY = ballVelY;
+		float newBallXPos = ballX;
+		float newBallYPos = ballY;
+		float newBallVelX = ballVelX;
+		float newBallVelY = ballVelY;
 
 		if (newBallXPos + gameBall.radius > gameBoard.width) {
 			gameBall.v.x = -abs(gameBall.v.x);

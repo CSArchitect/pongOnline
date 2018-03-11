@@ -310,6 +310,27 @@
         });
     };
 
+    /********************************************************************
+                                            Sync Server Time
+    ********************************************************************/
+    function syncServerTime(serverDateStr) {
+        var serverTimestamp = Date.parse(new Date(Date.parse(serverDateStr)));
+
+        var serverClientRequestDiffTime = serverTimestamp - clientTimestamp;
+        var nowTimeStamp = Date.parse(new Date().toUTCString());
+
+        var serverClientResponseDiffTime = nowTimeStamp - serverTimestamp;
+        var responseTime = (serverClientRequestDiffTime - nowTimeStamp + clientTimestamp - serverClientResponseDiffTime) / 2;
+
+        serverTimeOffset = (serverClientResponseDiffTime - responseTime);
+
+        var date = new Date();
+
+        date.setTime(date.getTime() + serverTimeOffset);
+
+        callback.call(null, date);
+
+    };
 
     /********************************************************************
                                             Game Loop
