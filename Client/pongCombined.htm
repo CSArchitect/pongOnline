@@ -252,19 +252,19 @@
 
     function ConvergeStates() {
         switch (PlayerNum) {
-            case 1: game.p2.x = serverGame.p2.x;
+            case 0: game.p2.x = serverGame.p2.x;
+                game.p3.y = serverGame.p3.y;
+                game.p4.y = serverGame.p4.y;
+                break;
+            case 1: game.p1.x = serverGame.p1.x;
                 game.p3.y = serverGame.p3.y;
                 game.p4.y = serverGame.p4.y;
                 break;
             case 2: game.p1.x = serverGame.p1.x;
-                game.p3.y = serverGame.p3.y;
-                game.p4.y = serverGame.p4.y;
-                break;
-            case 3: game.p1.x = serverGame.p1.x;
                 game.p2.x = serverGame.p2.x;
                 game.p4.y = serverGame.p4.y;
                 break;
-            case 4: game.p1.x = serverGame.p1.x;
+            case 3: game.p1.x = serverGame.p1.x;
                 game.p2.x = serverGame.p2.x;
                 game.p3.y = serverGame.p3.y;
         }
