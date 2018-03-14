@@ -89,7 +89,7 @@ void openHandler(int clientID){
 			cout << "4 players have joined";
 		}
 	}
-	server.wsSend(clientID, to_string(player_num));
+	server.wsSend(clientID, "PlayerNum" + '|' + to_string(player_num));
 }
 
 
