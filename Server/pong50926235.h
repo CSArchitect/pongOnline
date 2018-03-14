@@ -91,7 +91,6 @@ private:
 	score score;
 	float paddleSpeed;
 	int clock;
-	Timer timer;
 };
 
 
