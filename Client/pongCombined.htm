@@ -107,7 +107,7 @@
         var tokens = text.split("|");
         if (tokens[1] == "-1") {
             serverTimeStart = syncServerTime(tokens[0]);
-            game.clock = math.floor((Date.parse(new Date().toUTCString()) - game.date) / 33.33333);
+            game.clock = Math.floor((Date.parse(new Date().toUTCString()) - game.date) / 33.33333);
             console.log(game.clock);
         }
         else if (tokens[0] == "PlayerNum") {
@@ -185,12 +185,12 @@
     //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
     Game.prototype.draw = function (bX, bY, bvX, bvY, p1T, p2T, p3L, p4L, s1, s2, s3, s4, ballColor) {
         this.context.clearRect(0, 0, this.width, this.height);
-        this.ball.draw(this.context, math.floor(parseFloat(bX)), math.floor(parseFloat(bY)), ballColor);
+        this.ball.draw(this.context, Math.floor(parseFloat(bX)), Math.floor(parseFloat(bY)), ballColor);
 
-        this.p1.draw(this.context, 5, math.floor(parseFloat(p1T)));
-        this.p2.draw(this.context, this.width - 5 - 2, math.floor(parseFloat(p2T)));
-        this.p3.draw(this.context, math.floor(parseFloat(p3L)), 5);
-        this.p4.draw(this.context, math.floor(parseFloat(p4L)), this.height - 5 - 2);
+        this.p1.draw(this.context, 5, Math.floor(parseFloat(p1T)));
+        this.p2.draw(this.context, this.width - 5 - 2, Math.floor(parseFloat(p2T)));
+        this.p3.draw(this.context, Math.floor(parseFloat(p3L)), 5);
+        this.p4.draw(this.context, Math.floor(parseFloat(p4L)), this.height - 5 - 2);
         this.display1.draw(this.context, s1);
         this.display2.draw(this.context, s2);
         this.display3.draw(this.context, s3);
@@ -199,12 +199,12 @@
 
     Game.prototype.drawLocal = function () {
         this.context.clearRect(0, 0, this.width, this.height);
-        this.ball.draw(this.context, math.floor(parseFloat(this.ball.x)), math.floor(parseFloat(this.ball.y)), this.ball.color);
+        this.ball.draw(this.context, Math.floor(parseFloat(this.ball.x)), Math.floor(parseFloat(this.ball.y)), this.ball.color);
         
-        this.p1.draw(this.context, 5, math.floor(parseFloat(this.p1.y)));
-        this.p2.draw(this.context, this.width - 5 - 2, math.floor(parseFloat(this.p2.y)));
-        this.p3.draw(this.context, math.floor(parseFloat(this.p3.x)), 5);
-        this.p4.draw(this.context, math.floor(parseFloat(this.p4.x)), this.height - 5 - 2);
+        this.p1.draw(this.context, 5, Math.floor(parseFloat(this.p1.y)));
+        this.p2.draw(this.context, this.width - 5 - 2, Math.floor(parseFloat(this.p2.y)));
+        this.p3.draw(this.context, Math.floor(parseFloat(this.p3.x)), 5);
+        this.p4.draw(this.context, Math.floor(parseFloat(this.p4.x)), this.height - 5 - 2);
         this.display1.draw(this.context, this.display1.value);
         this.display2.draw(this.context, this.display2.value);
         this.display3.draw(this.context, this.display3.value);
@@ -553,6 +553,7 @@
     function MainLoop() {
         // Call the main loop again at a frame rate of 30fps
         game.updateInputs();
+        game.drawLocal();
         setTimeout(MainLoop, 33);
     }
 
