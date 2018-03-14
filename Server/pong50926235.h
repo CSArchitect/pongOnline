@@ -2,6 +2,12 @@
 #define PONG_H
 #include <string>
 #include "websocket.h"
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <time.h>
+#include <windows.h>
+#include <process.h>
 using namespace std;
 
 class Pong{
@@ -19,6 +25,8 @@ public:
 	ostringstream getData();
 	float randomDirection(float Min, float Max);
 	void pause();
+	void GameLoop();
+	void update();
 
 private:
     struct paddle{
@@ -82,5 +90,9 @@ private:
 	board gameBoard;
 	score score;
 	float paddleSpeed;
+	int clock;
+	Timer timer;
 };
+
+
 #endif

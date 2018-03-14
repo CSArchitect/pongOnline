@@ -145,6 +145,7 @@ using namespace std;
 	}
 
 	void Pong::init(){
+		clock = 0;
 		paddleSpeed = 4;
 		gameBall.owner = p1;
 		gameBall.radius = 10;
@@ -192,15 +193,7 @@ using namespace std;
 	****************************************************************/
 	string Pong::getGameState() 
 	{ 
-		updateBall(gameBall.x, gameBall.y, gameBall.v.x, gameBall.v.y);
-		if (player1left.buttonDownMovement != 0)
-			updatePaddle(p1, player1left.buttonDownMovement);
-		if (player2right.buttonDownMovement != 0)
-			updatePaddle(p2, player2right.buttonDownMovement);
-		if (player3top.buttonDownMovement != 0)
-			updatePaddle(p3, player3top.buttonDownMovement);
-		if (player4bottom.buttonDownMovement != 0)
-			updatePaddle(p4, player4bottom.buttonDownMovement);
+		update();
 
 		string colors[] = { "red", "blue", "yellow", "green" };
 		string returnString = ""; 
@@ -218,6 +211,18 @@ using namespace std;
 						to_string(score.p4)					+ '|' +
 						colors[(int)gameBall.owner];
 		return returnString; 
+	}
+
+	void Pong::update() {
+		updateBall(gameBall.x, gameBall.y, gameBall.v.x, gameBall.v.y);
+		if (player1left.buttonDownMovement != 0)
+			updatePaddle(p1, player1left.buttonDownMovement);
+		if (player2right.buttonDownMovement != 0)
+			updatePaddle(p2, player2right.buttonDownMovement);
+		if (player3top.buttonDownMovement != 0)
+			updatePaddle(p3, player3top.buttonDownMovement);
+		if (player4bottom.buttonDownMovement != 0)
+			updatePaddle(p4, player4bottom.buttonDownMovement);
 	}
 
 	

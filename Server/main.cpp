@@ -3,16 +3,10 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <time.h>
 #include "websocket.h"
-#include <windows.h>
-#include <process.h>
 #include "pong50926235.h"
 #include <queue>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
-#define INTERVAL_MS 10
+#define INTERVAL_MS 33
 
 using namespace std;
 
