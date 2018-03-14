@@ -105,10 +105,13 @@
         //console.log(text);
         //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
         var tokens = text.split("|");
-        if (tokens[1] = -1) {
+        if (tokens[1] == "-1") {
             serverTimeStart = syncServerTime(tokens[0]);
             game.clock = math.floor((Date.parse(new Date().toUTCString()) - game.date) / 33.33333);
             console.log(game.clock);
+        }
+        else if (tokens[0] == "PlayerNum") {
+            PlayerNum = parseInt(tokens[1]);
         }
         else if (ServerDraw == true)
             game.draw(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13]);
@@ -208,6 +211,8 @@
         this.display4.draw(this.context, this.display4.value);
     }
 
+
+
     Game.prototype.setGameState = function (bX, bY, bvX, bvY, p1T, p2T, p3L, p4L, s1, s2, s3, s4, ballOwner) {
         this.ball.x = bX;
         this.ball.y = bY;
@@ -224,6 +229,9 @@
         this.display4.value = s4;
     }
 
+   /***********************************************************************************************************
+                                    Converge Game States
+    ***********************************************************************************************************/
     function StateDiff() { //returns true IFF local gamestate is the same as server gamestate
         var diff = false;
         diff = game.ball.x == serverGame.ball.x &&
@@ -243,6 +251,23 @@
     }
 
     function ConvergeStates() {
+        switch (PlayerNum) {
+            case 1: game.p2.x = serverGame.p2.x;
+                game.p3.y = serverGame.p3.y;
+                game.p4.y = serverGame.p4.y;
+                break;
+            case 2: game.p1.x = serverGame.p1.x;
+                game.p3.y = serverGame.p3.y;
+                game.p4.y = serverGame.p4.y;
+                break;
+            case 3: game.p1.x = serverGame.p1.x;
+                game.p2.x = serverGame.p2.x;
+                game.p4.y = serverGame.p4.y;
+                break;
+            case 4: game.p1.x = serverGame.p1.x;
+                game.p2.x = serverGame.p2.x;
+                game.p3.y = serverGame.p3.y;
+        }
         for (serverGame.clock; serverGame.clock < game.clock; ) {
             serverGame.update();
         }
@@ -472,6 +497,7 @@
     var game = new Game();
     var serverGame = new Game();
     var ServerDraw = false; //Set this to true if you want the client to draw exactly what the server sends
+    var PlayerNum = 0;  // Player number of this client
 
     function MainLoop() {
         // Call the main loop again at a frame rate of 30fps
