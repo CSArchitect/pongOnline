@@ -13,7 +13,7 @@ using namespace std;
 chrono::system_clock::duration artificialLatency(chrono::system_clock::duration timestamp, int type, int min, int max);
 string return_current_time_and_date();
 void sendToClients(string send);
-bool addArtLatency = false;
+bool addArtLatency = true;
 
 /*********************************************
 
@@ -186,7 +186,7 @@ void parseStringUpdatePacket(int clientID, string message){
 		chrono::system_clock::duration now = chrono::system_clock::now().time_since_epoch();
 		chrono::system_clock::duration timestamp;
 		if (addArtLatency)
-			timestamp = artificialLatency(now, 2, 5, 200); //0 =fixed, 1=random, 2=incremental (min, max) for incremental
+			timestamp = artificialLatency(now, 1, 5, 200); //0 =fixed, 1=random, 2=incremental (min, max) for incremental
 		else
 			timestamp = now;
 		inputTimeQueue.push(input(player_num, tokens[1], timestamp, timestamp - now));
