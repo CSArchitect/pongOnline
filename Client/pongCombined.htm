@@ -102,7 +102,7 @@
     var serverTimeStart;
 
     function update(text) {
-        console.log(text);
+        //console.log(text);
         //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
         var tokens = text.split("|");
         if (tokens[1] == "-1") {
@@ -112,6 +112,7 @@
         }
         else if (tokens[0] == "PlayerNum") {
             PlayerNum = parseInt(tokens[1]);
+            console.log("Inside else if");
         }
         else {
             serverGame.setGameState(tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13],tokens[14]);
@@ -277,6 +278,8 @@
         for (serverGame.clock; serverGame.clock < game.clock; ) {
             serverGame.update();
         }
+        game.ball.vx = serverGame.ball.vx;
+        game.ball.vy = serverGame.ball.vy;
         if (StateDiff()) {
             game.ball.x = serverGame.ball.x;
             game.ball.y = serverGame.ball.y;
@@ -335,14 +338,14 @@
             else if (input == 1)
                             game.p2.y = Math.max(0, game.p2.y - game.p2.speed);
                 break;
-            case 2: if (input == -1)
+            case 2: if (input == 1)
                             game.p3.x = Math.min(game.width, game.p3.x + game.p3.speed);
-            else if (input == 1)
+            else if (input == -1)
                         game.p3.x = Math.max(0, game.p3.x - game.p3.speed);
                 break;
-            case 3: if (input == -1)
+            case 3: if (input == 1)
                             game.p4.x = Math.min(game.height, game.p4.x + game.p4.speed);
-            else if (input == 1)
+            else if (input == -1)
                         game.p4.x = Math.max(0, game.p4.x - game.p4.speed);
                 break;
         }
@@ -395,6 +398,11 @@
         this.height = 10;
         this.color = "red";
         this.owner = '';
+        this.speed = 1;
+    }
+    Ball.prototype.init = function (vx, vy) {
+        this.vx = vx;
+        this.vy = vy;
     }
 
     Ball.prototype.draw = function (p, x, y, color) {
@@ -529,16 +537,17 @@
     // Initialize our game instance
     var game = new Game();
     var serverGame = new Game();
-    var ServerDraw = true; //Set this to true if you want the client to draw exactly what the server sends
+    var ServerDraw = false; //Set this to true if you want the client to draw exactly what the server sends
     var PlayerNum = 0;  // Player number of this client
 
     function MainLoop() {
         // Call the main loop again at a frame rate of 30fps
         game.updateInputs();
-        if (ServerDraw == false)
-            game.drawLocal();
-        else
+        ConvergeStates();
+        if (ServerDraw)
             serverGame.drawLocal();
+        else
+            game.drawLocal();
         setTimeout(MainLoop, 33);
     }
 

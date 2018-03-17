@@ -84,7 +84,7 @@ void openHandler(int clientID){
 			cout << "4 players have joined";
 		}
 	}
-	server.wsSend(clientID, "PlayerNum" + '|' + to_string(player_num));
+	server.wsSend(clientID, string("PlayerNum") + '|' + to_string(player_num));
 }
 
 
@@ -154,7 +154,7 @@ string return_current_time_and_date()
 	std::stringstream ss;
 	ss << std::put_time(localtime(&in_time_t), "%Y-%m-%d %X");
 	ss << '.' << std::setfill('0') << std::setw(3) << ms.count();
-	cout << ss.str() << endl;
+	//cout << ss.str() << endl;
 	return ss.str();
 }
 
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 {
 	players = new player[4];
 	for (int i = 0; i < 4; ++i)
-		players[i].clientID = i;
+		players[i].clientID = -1;
 
 	/* set event handler */
 	server.setOpenHandler(openHandler);
