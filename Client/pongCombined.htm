@@ -102,7 +102,7 @@
     var serverTimeStart;
 
     function update(text) {
-        //console.log(text);
+        console.log(text);
         //"timeStamp | ballPosX | ballPosY | ballDirX | ballDirY | paddle1top | paddle2top | paddle3left | paddle4left | scoreP1 | scoreP2 | scoreP3 | scoreP4 | ballOwner"
         var tokens = text.split("|");
         if (tokens[1] == "-1") {
@@ -113,8 +113,9 @@
         else if (tokens[0] == "PlayerNum") {
             PlayerNum = parseInt(tokens[1]);
         }
-        else
-            serverGame.setGameState(tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13]);
+        else {
+            serverGame.setGameState(tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7], tokens[8], tokens[9], tokens[10], tokens[11], tokens[12], tokens[13],tokens[14]);
+        }
     }
 
     function send(text) {

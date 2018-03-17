@@ -149,9 +149,12 @@ string return_current_time_and_date()
 {
 	auto now = std::chrono::system_clock::now();
 	auto in_time_t = std::chrono::system_clock::to_time_t(now);
+	auto ms = std::chrono::duration_cast<chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
 	std::stringstream ss;
 	ss << std::put_time(localtime(&in_time_t), "%Y-%m-%d %X");
+	ss << '.' << std::setfill('0') << std::setw(3) << ms.count();
+	cout << ss.str() << endl;
 	return ss.str();
 }
 
