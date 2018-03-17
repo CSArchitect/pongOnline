@@ -280,7 +280,8 @@
         }
         game.ball.vx = serverGame.ball.vx;
         game.ball.vy = serverGame.ball.vy;
-        if (StateDiff()) {
+        if (!StateDiff()) {
+            console.log("inside statediff()");
             game.ball.x = serverGame.ball.x;
             game.ball.y = serverGame.ball.y;
             game.ball.vx = serverGame.ball.vx;
