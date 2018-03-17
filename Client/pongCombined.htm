@@ -210,8 +210,6 @@
         this.display4.draw(this.context, this.display4.value);
     }
 
-
-
     Game.prototype.setGameState = function (bX, bY, bvX, bvY, p1T, p2T, p3L, p4L, s1, s2, s3, s4, ballOwner) {
         var owner = -1;
         if (ballOwner == "red")
@@ -308,40 +306,43 @@
         now = now.substr(now.length - 9, now.length);
         if (this.keys.isPressed(37)) { // LEFT
             input += username + "|L|" + now;
+            send(input);
             game.movePaddle(-1);
         } else if (this.keys.isPressed(38)) { // UP
             input += username + "|U|" + now;
+            send(input);
             game.movePaddle(1);
         } else if (this.keys.isPressed(39)) { // RIGHT
             input += username + "|R|" + now;
+            send(input);
             game.movePaddle(1);
         } else if (this.keys.isPressed(40)) { // DOWN
             input += username + "|D|" + now;
+            send(input);
             game.movePaddle(-1);
         }
-        send(input);
     };
 
     Game.prototype.movePaddle = function (input) {
-        switch (playerNum) {
+        switch (PlayerNum) {
             case 0: if (input == -1)
                             game.p1.y = Math.min(game.height, game.p1.y + game.p1.speed);
-            else if (paddleMove == 1)
+            else if (input == 1)
                 game.p1.y = Math.max(0, game.p1.y - game.p1.speed);
                 break;
             case 1: if (input == -1)
                             game.p2.y = Math.min(game.height, game.p2.y + game.p2.speed);
-            else if (paddleMove == 1)
+            else if (input == 1)
                             game.p2.y = Math.max(0, game.p2.y - game.p2.speed);
                 break;
             case 2: if (input == -1)
                             game.p3.x = Math.min(game.width, game.p3.x + game.p3.speed);
-            else if (paddleMove == 1)
+            else if (input == 1)
                         game.p3.x = Math.max(0, game.p3.x - game.p3.speed);
                 break;
             case 3: if (input == -1)
                             game.p4.x = Math.min(game.height, game.p4.x + game.p4.speed);
-            else if (paddleMove == 1)
+            else if (input == 1)
                         game.p4.x = Math.max(0, game.p4.x - game.p4.speed);
                 break;
         }
@@ -525,7 +526,6 @@
     /********************************************************************
                                             Game Loop
     ********************************************************************/
-
     // Initialize our game instance
     var game = new Game();
     var serverGame = new Game();
