@@ -13,6 +13,7 @@ using namespace std;
 chrono::system_clock::duration artificialLatency(chrono::system_clock::duration timestamp, int type, int min, int max);
 string return_current_time_and_date();
 void sendToClients(string send);
+bool addArtLatency = false;
 
 /*********************************************
 
@@ -180,10 +181,12 @@ void parseStringUpdatePacket(int clientID, string message){
 	// Add inputs to the Priority Queue such that the top of the queue has the lowest timestamp
 	if (tokens.size() >= 3) {
 		chrono::system_clock::duration now = chrono::system_clock::now().time_since_epoch();
-		chrono::system_clock::duration timestamp = artificialLatency(now, 2, 5, 200); //0 =fixed, 1=random, 2=incremental (min, max) for incremental
+		chrono::system_clock::duration timestamp;
+		if (addArtLatency)
+			timestamp = artificialLatency(now, 2, 5, 200); //0 =fixed, 1=random, 2=incremental (min, max) for incremental
+		else
+			timestamp = now;
 		inputTimeQueue.push(input(player_num, tokens[1], timestamp, timestamp - now));
-		//now = chrono::time_point_cast<chrono::milliseconds>(now);
-		//cout << endl << chrono::duration_cast<chrono::milliseconds>(now).count() << " " << chrono::duration_cast<chrono::milliseconds>(timestamp - now).count();
 	}
 }
 

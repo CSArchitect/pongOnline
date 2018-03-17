@@ -154,20 +154,20 @@ using namespace std;
 		gameBall.y = gameBoard.height / 2;
 		gameBall.v.x = randomDirection(gameBall.speed * -1, gameBall.speed);
 		gameBall.v.y = gameBall.speed - abs(gameBall.v.x);
-		player1left.top = gameBoard.height / 2;
+		player1left.top = gameBoard.height / 2 - 75/2;
 		player1left.left = 5;
 		player1left.height = 75;
 		player1left.width = 3;
-		player2right.top = gameBoard.height / 2;
+		player2right.top = gameBoard.height / 2 - 75 / 2;
 		player2right.left = gameBoard.width - 5;
 		player2right.height = 75;
 		player2right.width = 3;
 		player3top.top = 5;
-		player3top.left = gameBoard.width / 2;
+		player3top.left = gameBoard.width / 2 - 75 / 2;
 		player3top.height = 3;
 		player3top.width = 75;
 		player4bottom.top = gameBoard.height - 5;
-		player4bottom.left = gameBoard.width / 2;
+		player4bottom.left = gameBoard.width / 2 - 75 / 2;
 		player4bottom.height = 3;
 		player4bottom.width = 75;
 		score.p1 = 0;
@@ -197,18 +197,18 @@ using namespace std;
 
 		string colors[] = { "red", "blue", "yellow", "green" };
 		string returnString = ""; 
-		returnString += to_string(gameBall.x)				+ '|' + 
-						to_string(gameBall.y)				+ '|' + 
+		returnString += to_string(gameBall.x)			+ '|' + 
+						to_string(gameBall.y)					+ '|' + 
 						to_string(gameBall.v.x)				+ '|' + 
-						to_string(gameBall.v.y)				+ '|' + 
+						to_string(gameBall.v.y)					+ '|' + 
 						to_string(player1left.top)			+ '|' + 
 						to_string(player2right.top)			+ '|' + 
 						to_string(player3top.left)			+ '|' + 
 						to_string(player4bottom.left)		+ '|' +
-						to_string(score.p1)					+ '|' +
-						to_string(score.p2)					+ '|' +
-						to_string(score.p3)					+ '|' +
-						to_string(score.p4)					+ '|' +
+						to_string(score.p1)						+ '|' +
+						to_string(score.p2)						+ '|' +
+						to_string(score.p3)						+ '|' +
+						to_string(score.p4)						+ '|' +
 						colors[(int)gameBall.owner];
 		return returnString; 
 	}
