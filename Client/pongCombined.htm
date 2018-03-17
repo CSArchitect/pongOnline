@@ -281,21 +281,26 @@
         game.ball.vx = serverGame.ball.vx;
         game.ball.vy = serverGame.ball.vy;
         if (!StateDiff()) {
-            console.log("inside statediff()");
             game.ball.x = serverGame.ball.x;
             game.ball.y = serverGame.ball.y;
             game.ball.vx = serverGame.ball.vx;
             game.ball.vy = serverGame.ball.vy;
             game.ball.owner = serverGame.ball.owner;
-            game.p1.y = serverGame.p1.y;
-            game.p2.y = serverGame.p2.y;
-            game.p3.x = serverGame.p3.x;
-            game.p4.x = serverGame.p4.x;
+            game.p1.y = lerp(game.p1.y, serverGame.p1.y);
+            game.p2.y = lerp(game.p2.y, serverGame.p2.y);
+            game.p3.x = lerp(game.p3.x, serverGame.p3.x);
+            game.p4.x = lerp(game.p4.x, serverGame.p4.x);
             game.display1.value = serverGame.display1.value;
             game.display2.value = serverGame.display2.value;
             game.display3.value = serverGame.display3.value;
             game.display4.value = serverGame.display4.value;
         }
+    }
+
+    var frac = 0.5;
+    function lerp( a,  b)
+    {
+        return a + frac * (b - a);
     }
 
 
