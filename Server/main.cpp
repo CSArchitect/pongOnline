@@ -13,7 +13,7 @@ using namespace std;
 chrono::system_clock::duration artificialLatency(chrono::system_clock::duration timestamp, int type, int min, int max);
 string return_current_time_and_date();
 void sendToClients(string send);
-bool addArtLatency = true;
+bool addArtLatency = false;
 
 /*********************************************
 
@@ -251,6 +251,14 @@ int main(int argc, char *argv[])
 	server.setCloseHandler(closeHandler);
 	server.setMessageHandler(messageHandler);
     server.setPeriodicHandler(periodicHandler);
+
+	cout << "Would you like to simulate latency? (y/n)" << endl;
+	char answer = cin.get();
+	cin.ignore(1000, '\n');
+	if (answer == 'y' || answer == 'Y')
+		addArtLatency = true;
+	else
+		addArtLatency = false;
 
 
     /* start the chatroom server, listen to ip '127.0.0.1' and ports '8000'-'8003' */
