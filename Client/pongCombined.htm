@@ -199,6 +199,8 @@
 
     Game.prototype.drawLocal = function () {
         this.context.clearRect(0, 0, this.width, this.height);
+        var colors =  [ "red", "blue", "yellow", "green"];
+        this.ball.color = colors[this.ball.owner];
         this.ball.draw(this.context, Math.floor(parseFloat(this.ball.x)), Math.floor(parseFloat(this.ball.y)), this.ball.color);
         
         this.p1.draw(this.context, 5, Math.floor(parseFloat(this.p1.y)));
@@ -286,10 +288,11 @@
             game.ball.vx = serverGame.ball.vx;
             game.ball.vy = serverGame.ball.vy;
             game.ball.owner = serverGame.ball.owner;
-            game.p1.y = lerp(game.p1.y, serverGame.p1.y);
-            game.p2.y = lerp(game.p2.y, serverGame.p2.y);
-            game.p3.x = lerp(game.p3.x, serverGame.p3.x);
-            game.p4.x = lerp(game.p4.x, serverGame.p4.x);
+           // game.p1.y = lerp(game.p1.y, serverGame.p1.y);
+           // game.p2.y = lerp(game.p2.y, serverGame.p2.y);
+           // game.p3.x = lerp(game.p3.x, serverGame.p3.x);
+           // game.p4.x = lerp(game.p4.x, serverGame.p4.x);
+            lerpPaddles();
             game.display1.value = serverGame.display1.value;
             game.display2.value = serverGame.display2.value;
             game.display3.value = serverGame.display3.value;
@@ -297,10 +300,31 @@
         }
     }
 
-    var frac = 0.5;
-    function lerp( a,  b)
+    var frac = 0.2;             //this is the bias towards local game model for the local player's paddle
+    function lerpPaddles( )
     {
-        return a + frac * (b - a);
+        switch (PlayerNum) {
+            case 0: game.p1.y = game.p1.y + frac * (serverGame.p1.y - game.p1.y);
+                game.p2.y = game.p2.y + (1 - frac) * (serverGame.p2.y - game.p2.y);
+                game.p3.x = game.p3.x + (1 - frac) * (serverGame.p3.x - game.p3.x);
+                game.p4.x = game.p4.x + (1 - frac) * (serverGame.p4.x - game.p4.x);
+                break;
+            case 1: game.p1.y = game.p1.y + (1 - frac) * (serverGame.p1.y - game.p1.y);
+                game.p2.y = game.p2.y + frac * (serverGame.p2.y - game.p2.y);
+                game.p3.x = game.p3.x + (1 - frac) * (serverGame.p3.x - game.p3.x);
+                game.p4.x = game.p4.x + (1 - frac) * (serverGame.p4.x - game.p4.x);
+                break;
+            case 2: game.p1.y = game.p1.y + (1 - frac) * (serverGame.p1.y - game.p1.y);
+                game.p2.y = game.p2.y + (1 - frac) * (serverGame.p2.y - game.p2.y);
+                game.p3.x = game.p3.x + frac * (serverGame.p3.x - game.p3.x);
+                game.p4.x = game.p4.x + (1 - frac) * (serverGame.p4.x - game.p4.x);
+                break;
+            case 3: game.p1.y = game.p1.y + (1 - frac) * (serverGame.p1.y - game.p1.y);
+                game.p2.y = game.p2.y + (1 - frac) * (serverGame.p2.y - game.p2.y);
+                game.p3.x = game.p3.x + (1 - frac) * (serverGame.p3.x - game.p3.x);
+                game.p4.x = game.p4.x + frac * (serverGame.p4.x - game.p4.x);
+                break;
+        }
     }
 
 
@@ -403,7 +427,7 @@
         this.width = 10;
         this.height = 10;
         this.color = "red";
-        this.owner = '';
+        this.owner = -1;
         this.speed = 1;
     }
     Ball.prototype.init = function (vx, vy) {
